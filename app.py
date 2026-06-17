@@ -21,7 +21,10 @@ logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app)
+CORS(app,
+     origins="*",
+     methods=["GET", "POST", "OPTIONS"],
+     allow_headers=["Content-Type"])
 
 API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 if not API_KEY:
@@ -307,7 +310,7 @@ async def check_availability_async(
 
 # ─── Routes ───────────────────────────────────────────────────────────────────
 
-@app.route("/check", methods=["POST"])
+@app.route("/check", methods=["POST", "OPTIONS"])
 def check():
     data = request.get_json(force=True) or {}
     restaurant  = data.get("restaurant", "").strip()
